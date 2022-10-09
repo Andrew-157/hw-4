@@ -1,13 +1,17 @@
 information = {}
+
+
 while True:
     def input_error(func):
         def inner():
             try:
                 func()
             except KeyError:
-                print("Enter the name of the user whose number you want to change")
+                print("Enter the command and the user name and it's phone")
             except IndexError:
-                print("Enter the name and the phone with space between them")
+                print("Enter the command and the user name and it's phone")
+            except ValueError:
+                print("Enter the command and the user name and it's phone")
         return inner
 
     command = input()
@@ -21,20 +25,17 @@ while True:
     def say_hello():
         print("How can I help you?")
 
-    @input_error
     def add():
         global information
-        dict_1 = {command.split(" ")[1]: command.split(" ")[2]}
-        return information.update(dict_1)
+        information[command.split(" ")[1]] = command.split(" ")[2]
+        return information
 
     def show_all():
         print(information)
 
-    @input_error
     def change():
         information[command.split(" ")[1]] = command.split(" ")[2]
 
-    @input_error
     def phone():
         print(information[command.split(" ")[1]])
 
@@ -45,7 +46,9 @@ while True:
     def get_handler(comm):
         return commands[comm]
 
-    try:
+    @input_error
+    def main():
         get_handler(command.split(" ")[0].lower())()
-    except KeyError:
-        print("Please enter command")
+
+    if __name__ == "__main__":
+        main()
